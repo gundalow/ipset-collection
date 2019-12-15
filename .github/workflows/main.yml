@@ -11,8 +11,9 @@ jobs:
         path: ansible_collections/shaps/ipset
     - name: Setup python
       uses: actions/setup-python@v1
+
     - name: Install ansible
-      run: pip install ansible
+      run: pip install ansible pycodestyle
 
     - name: Run sanity tests
       run: ansible-test sanity
