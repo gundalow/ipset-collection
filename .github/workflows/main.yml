@@ -1,6 +1,10 @@
-name: ansible-test
+name: "Sanity and integration tests"
 
-on: [push]
+on:
+  push:
+    paths:
+    - "plugins/**"
+    - "tests/**"
 
 jobs:
   sanity-tests:
