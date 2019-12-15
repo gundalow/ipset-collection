@@ -1,0 +1,4 @@
+- name: Install ipset
+  package:
+    name: ipset
+    state: present

@@ -1,0 +1,45 @@
+- name: Install ipset
+  package:
+    name: ipset
+    state: present
+
+- name: Create ipset set {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    set_type: "hash:net"
+    set_timeout: "{{ ipset_entry_test_timeout }}"
+  become: true
+
+- name: Add {{ ipset_entry_test_network }} to {{ ipset_test_set_name }}
+  ipset_entry:
+    set_name: "{{ ipset_test_set_name }}"
+    net: "{{ ipset_entry_test_network }}"
+    timeout: "{{ ipset_entry_test_timeout }}"
+  become: true
+  register: ipset_entry_created
+
+- name: Check entry has actually been added
+  shell: "ipset list {{ ipset_test_set_name }} | grep {{ ipset_entry_test_network }}"
+  register: ipset_shell
+
+- name: Remove {{ ipset_entry_test_network }} from {{ ipset_test_set_name }}
+  ipset_entry:
+    set_name: "{{ ipset_test_set_name }}"
+    net: "{{ ipset_entry_test_network }}"
+    state: absent
+  become: true
+  register: ipset_entry_deleted
+
+- name: Check entry has actually been removed (should fail)
+  shell: "ipset list {{ ipset_test_set_name }} | grep {{ ipset_entry_test_network }}"
+  register: ipset_shell_removed
+  ignore_errors: true
+
+- name: Assert entry has been created
+  assert:
+    that:
+      - ipset_entry_created is changed
+      - "'{{ ipset_entry_test_network }}' in '{{ ipset_shell.stdout }}'"
+      - ipset_entry_deleted is changed
+      - ipset_shell_removed is failed
+      - "'{{ ipset_entry_test_network }}' not in '{{ ipset_shell_removed.stdout }}'"

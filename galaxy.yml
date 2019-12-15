@@ -1,0 +1,32 @@
+### REQUIRED
+
+namespace: shaps
+
+name: ipset
+
+version: 1.0.0
+
+readme: README.md
+
+authors:
+- Andrea Tartaglia <andrea@braingap.uk> https://github.com/shaps
+
+description: Add, remove or list entries in an ipset, create or delete ipsets
+
+license_file: 'LICENSE'
+
+# A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
+# requirements as 'namespace' and 'name'
+tags:
+  - ipset
+  - network
+  - linux
+  - system
+
+repository: https://github.com/shaps/ipset
+
+documentation: https://github.com/shaps/ipset/README.md
+
+homepage: https://github.com/shaps/ipset
+
+issues: http://github.com/shaps/ipset/issues
