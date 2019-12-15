@@ -2,6 +2,7 @@
   package:
     name: ipset
     state: present
+  become: true
 
 - name: Create ipset set {{ ipset_test_set_name }}
   ipset_set:
