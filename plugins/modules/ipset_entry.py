@@ -107,7 +107,7 @@ def main():
             cmd.extend(['timeout', module.params.get('timeout')])
         if not net_in_set(module):
             if module.check_mode:
-                module.exit_json(changed=net_in_set(module))
+                module.exit_json(changed=True)
             rc, stdout, stderr = module.run_command(cmd, check_rc=True)
             module.exit_json(stdout=stdout, stderr=stderr, rc=rc, changed=True)
         else:
@@ -116,7 +116,7 @@ def main():
         cmd = [ipset_bin, '-!', 'del', module.params.get('set_name'), module.params.get('net')]
         if net_in_set(module):
             if module.check_mode:
-                module.exit_json(changed=net_in_set(module))
+                module.exit_json(changed=True)
             rc, stdout, stderr = module.run_command(cmd, check_rc=True)
             module.exit_json(stdout=stdout, stderr=stderr, rc=rc, changed=True)
         else:
