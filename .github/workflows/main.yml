@@ -12,14 +12,8 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible and test requirements
-      run: pip install ansible pycodestyle pylint rstcheck virtualenv voluptuous yamllint
-
-    - name: Install python3-apt
-      run: sudo apt-get install -y python3-apt
-
     - name: Run sanity tests
-      run: ansible-test sanity
+      run: ansible-test sanity --docker
       working-directory: ansible_collections/shaps/ipset
 
     - name: Run integration tests
