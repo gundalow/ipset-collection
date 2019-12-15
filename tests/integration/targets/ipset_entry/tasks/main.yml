@@ -2,3 +2,8 @@
 - include_tasks: tests.yml
 
 - include_tasks: check_mode.yml
+
+- name: Delete set {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    state: absent
