@@ -13,11 +13,11 @@ jobs:
       uses: actions/setup-python@v1
     - name: Install ansible
       run: pip install ansible
-      
+
     - name: Run sanity tests
-      run: ansible-test -v sanity
+      run: ansible-test sanity
       working-directory: ansible_collections/shaps/ipset
-    
+
     - name: Run integration tests
-      run: ansible-test -v integration
+      run: ansible-test integration
       working-directory: ansible_collections/shaps/ipset
