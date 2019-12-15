@@ -1,0 +1,23 @@
+name: ansible-test
+
+on: [push]
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: ansible_collections/shaps/ipset
+    - name: Setup python
+      uses: actions/setup-python@v1
+    - name: Install ansible
+      run: pip install ansible
+      
+    - name: Run sanity tests
+      run: ansible-test -v sanity
+      working-directory: ansible_collections/shaps/ipset
+    
+    - name: Run integration tests
+      run: ansible-test -v integration
+      working-directory: ansible_collections/shaps/ipset
