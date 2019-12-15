@@ -3,7 +3,7 @@ name: ansible-test
 on: [push]
 
 jobs:
-  tests:
+  sanity-tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -19,6 +19,22 @@ jobs:
       run: ansible-test sanity --docker
       working-directory: ansible_collections/shaps/ipset
 
+
+  integration-tests:
+    strategy:
+      matrix:
+        int_images: ['centos7', 'centos8', 'fedora30', 'fedora31', 'ubuntu1604', 'ubuntu1804']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: ansible_collections/shaps/ipset
+    - name: Setup python
+      uses: actions/setup-python@v1
+
+    - name: Install ansible
+      run: pip install ansible
+
     - name: Run integration tests
-      run: ansible-test integration
+      run: ansible-test integration --docker-privileged --docker ${{ matrix.int_image }}
       working-directory: ansible_collections/shaps/ipset
