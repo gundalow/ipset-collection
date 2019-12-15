@@ -15,6 +15,9 @@ jobs:
     - name: Install ansible and test requirements
       run: pip install ansible pycodestyle pylint rstcheck virtualenv voluptuous yamllint
 
+    - name: Install python3-apt
+      run: apt install python3-apt
+
     - name: Run sanity tests
       run: ansible-test sanity
       working-directory: ansible_collections/shaps/ipset
