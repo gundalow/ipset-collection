@@ -1,30 +1,3 @@
-- name: Install ipset
-  package:
-    name: ipset
-    state: present
-  become: true
+- include_tasks: tests.yml
 
-- name: Create ipset set {{ ipset_test_set_name }}
-  ipset_set:
-    set_name: "{{ ipset_test_set_name }}"
-    set_type: "hash:net"
-    set_timeout: "{{ ipset_entry_test_timeout }}"
-  become: true
-
-- name: Add {{ ipset_entry_test_network }} to {{ ipset_test_set_name }}
-  ipset_entry:
-    set_name: "{{ ipset_test_set_name }}"
-    net: "{{ ipset_entry_test_network }}"
-    timeout: "{{ ipset_entry_test_timeout }}"
-  become: true
-  register: ipset_entry_created
-
-- name: Check entry has actually been added
-  shell: "ipset list {{ ipset_test_set_name }} | grep {{ ipset_entry_test_network }}"
-  register: ipset_shell
-
-- name: Assert entry has been created
-  assert:
-    that:
-      - ipset_entry_created is changed
-      - "'{{ ipset_entry_test_network }}' in '{{ ipset_shell.stdout }}'"
+- include_tasks: check_mode.yml

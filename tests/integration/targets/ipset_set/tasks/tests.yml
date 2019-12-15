@@ -1,0 +1,52 @@
+- name: Install ipset
+  package:
+    name: ipset
+    state: present
+  become: true
+
+- name: Create ipset set {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    set_type: "hash:net"
+    set_timeout: "{{ ipset_entry_test_timeout }}"
+  become: true
+  register: ipset_set_created
+
+- name: Create ipset set {{ ipset_test_set_name }} ( Idempotency test )
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    set_type: "hash:net"
+    set_timeout: "{{ ipset_entry_test_timeout }}"
+  become: true
+  register: ipset_set_created_idempotency
+
+- name: Check {{ ipset_test_set_name }} was actually created
+  command: "ipset list {{ ipset_test_set_name }} -t -q"
+  register: ipset_set_command_created
+
+- name: Delete {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    state: absent
+  register: ipset_set_removed
+
+- name: Delete {{ ipset_test_set_name }} ( Idempotency test )
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    state: absent
+  register: ipset_set_removed_idempotency
+
+- name: Check {{ ipset_test_set_name }} was actually removed ( should fail )
+  command: "ipset list {{ ipset_test_set_name }} -t -q"
+  ignore_errors: true
+  register: ipset_set_command_removed
+
+- name: Set was created and removed correctly
+  assert:
+    that:
+      - ipset_set_created is changed
+      - ipset_set_created_idempotency is not changed
+      - ipset_set_command_created.rc == 0
+      - ipset_set_removed is changed
+      - ipset_set_removed_idempotency is not changed
+      - ipset_set_command_removed.rc == 1

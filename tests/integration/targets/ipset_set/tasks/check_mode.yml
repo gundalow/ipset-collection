@@ -1,0 +1,28 @@
+---
+- name: Create ipset set {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    set_type: "hash:net"
+    set_timeout: "{{ ipset_entry_test_timeout }}"
+  become: true
+  check_mode: true
+  register: ipset_set_created_check_mode
+
+- name: Check {{ ipset_test_set_name }} was not created ( Should fail )
+  command: "ipset list {{ ipset_test_set_name }} -t -q"
+  register: ipset_set_command_created_check_mode
+  ignore_errors: true
+
+- name: Delete {{ ipset_test_set_name }}
+  ipset_set:
+    set_name: "{{ ipset_test_set_name }}"
+    state: absent
+  register: ipset_set_removed_check_mode
+  check_mode: true
+
+- name: Set was created and removed correctly
+  assert:
+    that:
+      - ipset_set_created_check_mode is changed
+      - ipset_set_command_created_check_mode.rc == 1
+      - ipset_set_removed_check_mode is not changed
