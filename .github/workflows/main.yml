@@ -12,8 +12,8 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible
-      run: pip install ansible pycodestyle
+    - name: Install ansible and test requirements
+      run: pip install ansible pycodestyle pylint
 
     - name: Run sanity tests
       run: ansible-test sanity
