@@ -17,8 +17,8 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible
-      run: pip install ansible
+    - name: Install ansible-minimal
+      run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
 
     - name: Run sanity tests
       run: ansible-test sanity --docker
@@ -37,8 +37,8 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible
-      run: pip install ansible
+    - name: Install ansible-minimal
+      run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
 
     - name: Run integration tests
       run: ansible-test integration --docker-privileged --docker ${{ matrix.int_image }}
