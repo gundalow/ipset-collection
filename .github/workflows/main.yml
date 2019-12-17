@@ -3,6 +3,7 @@ name: "Sanity and integration tests"
 on:
   push:
     paths:
+    - ".github/workflows/main.yml"
     - "plugins/**"
     - "tests/**"
 
