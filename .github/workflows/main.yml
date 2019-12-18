@@ -1,12 +1,18 @@
 name: "Sanity and integration tests"
 
 on:
-  [push, pull_request]:
+  push:
     paths:
     - ".github/workflows/main.yml"
     - "plugins/**"
     - "tests/**"
-
+  pull_request:
+    branches: 
+      - master
+    paths:
+      - ".github/workflows/main.yml"
+      - "plugins/**"
+      - "tests/**"
 jobs:
   sanity-tests:
     runs-on: ubuntu-latest
