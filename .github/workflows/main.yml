@@ -7,7 +7,7 @@ on:
     - "plugins/**"
     - "tests/**"
   pull_request:
-    branches: 
+    branches:
       - master
     paths:
       - ".github/workflows/main.yml"
@@ -35,6 +35,7 @@ jobs:
     strategy:
       matrix:
         int_images: ['centos7', 'centos8', 'fedora30', 'fedora31', 'ubuntu1604', 'ubuntu1804']
+        ansible_version: ['2.9', 'ansible-minimal']
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -45,6 +46,11 @@ jobs:
 
     - name: Install ansible-minimal
       run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
+      if: matrix.ansible_version == 'ansible-minimal'
+
+    - name: Install Ansible  ${{ matrix.ansible_version }}
+      run: pip install ${{ matrix.ansible_version }}
+      if: matrix.ansible_version != 'ansible-minimal'
 
     - name: Run integration tests
       run: ansible-test integration --docker-privileged --docker ${{ matrix.int_image }}
