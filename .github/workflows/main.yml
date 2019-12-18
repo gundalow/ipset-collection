@@ -14,7 +14,7 @@ on:
       - "plugins/**"
       - "tests/**"
 jobs:
-  sanity-tests:
+  sanity:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       working-directory: ansible_collections/shaps/ipset
 
 
-  integration-tests:
+  integration:
     strategy:
       matrix:
         int_images: ['centos7', 'centos8', 'fedora30', 'fedora31', 'ubuntu1604', 'ubuntu1804']
@@ -48,9 +48,13 @@ jobs:
       run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
       if: matrix.ansible_version == 'ansible-minimal'
 
-    - name: Install Ansible  ${{ matrix.ansible_version }}
-      run: pip install ansible==${{ matrix.ansible_version }}
-      if: matrix.ansible_version != 'ansible-minimal'
+    - name: Install Ansible 2.9
+      run: pip install 'ansible>=2.9,<2.10'
+      if: matrix.ansible_version == '2.9'
+
+    - name: Install Ansible 2.10
+      run: pip install 'ansible>=2.9,<2.10'
+      if: matrix.ansible_version == '2.10'
 
     - name: Run integration tests
       run: ansible-test integration --docker-privileged --docker ${{ matrix.int_image }}
