@@ -49,7 +49,7 @@ jobs:
       if: matrix.ansible_version == 'ansible-minimal'
 
     - name: Install Ansible  ${{ matrix.ansible_version }}
-      run: pip install ${{ matrix.ansible_version }}
+      run: pip install ansible==${{ matrix.ansible_version }}
       if: matrix.ansible_version != 'ansible-minimal'
 
     - name: Run integration tests
