@@ -32,6 +32,12 @@
   shell: "ipset list {{ ipset_test_set_name }} | grep {{ ipset_entry_test_network }}"
   register: ipset_shell
 
+- name: List entries in {{ ipset_test_set_name }}
+  ipset_entry:
+    set_name: "{{ ipset_test_set_name }}"
+    state: list
+  register: ipset_entry_list
+
 - name: Remove {{ ipset_entry_test_network }} from {{ ipset_test_set_name }}
   ipset_entry:
     set_name: "{{ ipset_test_set_name }}"
@@ -63,3 +69,5 @@
       - ipset_entry_deleted_idempotency is not changed
       - ipset_shell_removed is failed
       - "'{{ ipset_entry_test_network }}' not in '{{ ipset_shell_removed.stdout }}'"
+      - ipset_entry_list.nets.0.net == ipset_entry_test_network
+      - ipset_entry_list.nets.0.timeout <= ipset_entry_test_timeout

@@ -1,3 +1,0 @@
-ipset_test_set_name: blacklist
-ipset_entry_test_network: "172.18.0.0/16"
-ipset_entry_test_timeout: "1209600"

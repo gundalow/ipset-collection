@@ -71,7 +71,7 @@ def set_exists(module):
     test_cmd = [ipset_bin, 'list', '-q', '-t', module.params.get('set_name')]
     rc, stdout, stderr = module.run_command(test_cmd, check_rc=False)
 
-    return bool(rc)
+    return not bool(rc)
 
 
 def main():
@@ -93,7 +93,7 @@ def main():
 
     if module.params.get('state') == 'present':
         cmd = [ipset_bin, '-!', 'create', module.params.get('set_name'), module.params.get('set_type'), 'timeout', module.params.get('set_timeout')]
-        if set_exists(module):
+        if not set_exists(module):
             if module.check_mode:
                 module.exit_json(changed=True)
             rc, stdout, stderr = module.run_command(cmd, check_rc=True)
@@ -103,7 +103,7 @@ def main():
     if module.params.get('state') == 'absent':
         flush_cmd = [ipset_bin, '-!', 'flush', module.params.get('set_name')]
         destroy_cmd = [ipset_bin, '-!', 'destroy', module.params.get('set_name')]
-        if not set_exists(module):
+        if set_exists(module):
             if module.check_mode:
                 module.exit_json(changed=True)
             flush_rc, flush_stdout, flush_stderr = module.run_command(flush_cmd, check_rc=True)
