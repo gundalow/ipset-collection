@@ -23,8 +23,8 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible-minimal
-      run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
+    - name: Install ansible-base
+      run: pip install git+https://github.com/ansible-collection-migration/ansible-base.git
 
     - name: Run sanity tests
       run: ansible-test sanity --docker
@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
         int_images: ['centos7', 'centos8', 'fedora30', 'fedora31', 'ubuntu1604', 'ubuntu1804']
-        ansible_version: ['2.9', 'ansible-minimal']
+        ansible_version: ['2.9', 'ansible-base']
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -44,9 +44,9 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v1
 
-    - name: Install ansible-minimal
-      run: pip install git+https://github.com/ansible-collection-migration/ansible-minimal.git
-      if: matrix.ansible_version == 'ansible-minimal'
+    - name: Install ansible-base
+      run: pip install git+https://github.com/ansible-collection-migration/ansible-base.git
+      if: matrix.ansible_version == 'ansible-base'
 
     - name: Install Ansible 2.9
       run: pip install 'ansible>=2.9,<2.10'
